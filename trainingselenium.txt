@@ -1,0 +1,175 @@
+//tagname[@attribue='value']
+<                   
+getAttribute("value");
+
+https://demoqa.com/automation-practice-form
+
+
+
+
+package com.frankevana;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+
+import io.github.bonigarcia.wdm.WebDriverManager;
+
+public class Trial {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		//System.setProperty("webdriver.chrome.driver", "./drivers/chromedriver.exe");
+				WebDriverManager.chromedriver().setup();
+				WebDriver driver=new ChromeDriver();
+				//passing url
+				driver.get("https://demoqa.com/automation-practice-form");
+				//maximize windows
+				driver.manage().window().maximize();
+				WebElement name= driver.findElement(By.id("firstName"));
+				name.sendKeys("evana");
+				String name1=name.getText();
+				System.out.println(name1);
+				try {
+					Thread.sleep(3000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				driver.quit();
+	}
+
+}
+
+
+
+
+doubts
+
+public class MakeMyTripDateTest 
+{
+WebDriver driver;
+
+@BeforeMethod
+public void openBrowser()
+{ 
+
+driver = BrowserSelection.usingChrome(); 
+}
+
+@Test
+public void tripDetails() throws InterruptedException, AWTException
+{
+
+//Modify Wait time as per the Network Ability in the Thread Sleep method
+
+driver.get("https://www.makemytrip.com/"); 
+driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+Thread.sleep(5000);
+
+
+
+calendar
+
+
+import java.time.LocalDate;
+import java.util.Calendar;
+import java.util.List;
+import java.util.TimeZone;
+import org.openqa.selenium.WebElement;
+public class DateUtil {
+    //Get The Current Day
+    public static String getCurrentDay() {
+        //Create a Calendar Object
+        Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
+        //Get Current Day as a number
+        int todayInt = calendar.get(Calendar.DAY_OF_MONTH);
+        System.out.println("Today Int: " + todayInt + "\n");
+        //Integer to String Conversion
+        String todayStr = Integer.toString(todayInt);
+        System.out.println("Today Str: " + todayStr + "\n");
+        return todayStr;
+    }
+    //Get The Current Day plus days. You can change this method based on your needs.
+    public static String getCurrentDayPlus(int days) {
+        LocalDate currentDate = LocalDate.now();
+        int dayOfWeekPlus = currentDate.getDayOfWeek().plus(days).getValue();
+        return Integer.toString(dayOfWeekPlus);
+    }
+    //Click to given day
+    public static void clickGivenDay(List<WebElement> elementList, String day) {
+        //DatePicker is a table. Thus we can navigate to each cell
+        //and if a cell matches with the current date then we will click it.
+        /**Functional JAVA version of this method.*/
+        elementList.stream()
+            .filter(element -> element.getText().contains(day))
+            .findFirst()
+            .ifPresent(WebElement::click);
+        /**Non-functional JAVA version of this method.*/
+        //for (
+        //    WebElement cell : elementList) {
+        //    String cellText = cell.getText();
+        //    if (cellText.contains(day)) {
+        //        cell.click();
+        //        break;
+        //    }
+        //}
+    }
+}
+//////////////////////////////////////////
+
+import base.BaseTests;
+import components.DatePicker;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+ 
+import java.time.LocalDate;
+import java.time.Month;
+ 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+ 
+public class DatePickerTests extends BaseTests {
+ 
+    private DatePicker datePicker;
+ 
+    @BeforeAll
+    public static void launchApp(){
+        driver.get("file:///datepicker.html");
+    }
+ 
+    @BeforeEach
+    public void refreshCalendar(){
+        driver.navigate().refresh();
+        datePicker = new DatePicker(driver);
+    }
+ 
+    @Test
+    public void pastDate(){
+        var dateToSelect = LocalDate.of(1989, Month.DECEMBER, 20);
+        var selectedDate = datePicker.chooseDate(dateToSelect);
+        assertEquals(dateToSelect, selectedDate);
+    }
+ 
+    @Test
+    public void futureDate(){
+        var dateToSelect = LocalDate.now().plusMonths(7);
+        var selectedDate = datePicker.chooseDate(dateToSelect);
+        assertEquals(dateToSelect, selectedDate);
+    }
+ 
+    @Test
+    public void currentMonth(){
+        var dateToSelect = LocalDate.now().withDayOfMonth(15);
+        var selectedDate = datePicker.chooseDate(dateToSelect);
+        assertEquals(dateToSelect, selectedDate);
+    }
+ 
+    @Test
+    public void trickyDate(){
+        var dateToSelect = LocalDate.of(2020, Month.MARCH, 31);
+        var selectedDate = datePicker.chooseDate(dateToSelect);
+        assertEquals(dateToSelect, selectedDate);
+    }
+}
